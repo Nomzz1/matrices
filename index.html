@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            .block{
+                display: flex;
+                align-items: center;
+            }
+            .item{
+                margin: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Addition: Orders must be equal</h1>
+        <div class = "block">
+            <h2 class = "item">Order:</h2>
+            <input type = "number" id = "order 1" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="addOrder()">
+            <h2 class = "item">x</h2>
+            <input type = "number" id = "order 2" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="addOrder()">
+        </div>
+        <div class = "block">
+            <h1 class = "block">[<div id = "matrix 1" class = "item"></div>]</h1>
+            <h1 class = "item">+</h1>
+            <h1 class = "block">[<div id = "matrix 2" class = "item"></div>]</h1>
+            <h1 class = "item">=</h1>
+            <h1 class = "block">[<div id = "result 1" class = "item"></div>]</h1>
+        </div>
+        <button onclick = "add()">Calculate!</button>
+        <h1>Multiplication: No. of Columns of matrix 1 must equal the No. of Rows of matrix 2</h1>
+        <div class = "block">
+            <h2 class = "item">Order 1:</h2>
+            <input type = "number" id = "order 3" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="timesOrder(3)">
+            <h2 class = "item">x</h2>
+            <input type = "number" id = "order 4" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="timesOrder(4)">
+        </div>
+        <div class = "block">
+            <h2 class = "item">Order 2:</h2>
+            <input type = "number" id = "order 5" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="timesOrder(5)">
+            <h2 class = "item">x</h2>
+            <input type = "number" id = "order 6" style="width: 2.5em;height: 1.5em;" class = "item" min = 1 value = 1 oninput="timesOrder(6)">
+        </div>
+        <div class = "block">
+            <h1 class = "block">[<div id = "matrix 3" class = "item"></div>]</h1>
+            <h1 class = "item">x</h1>
+            <h1 class = "block">[<div id = "matrix 4" class = "item"></div>]</h1>
+            <h1 class = "item">=</h1>
+            <h1 class = "block">[<div id = "result 2" class = "item"></div>]</h1>
+        </div>
+        <button onclick = "multiply()" class = "item">Calculate!</button>
+        <h1>Created by Mohammed Yusuf Nawab.</h1>
+        <script>
+            function addOrder(){
+                let col = document.getElementById("order 1").value;
+                let row = document.getElementById("order 2").value;
+                let rows = `<div class = "row">`;
+                for (i = 0; i < row; i++){
+                    rows += `<input type = "number" style="width: 3.5em;height: 1.5em;" class = "item" value = 1 name = "item">`;
+                };
+                rows += `</div>`;
+                let cols = `<div class = "col">`;
+                for (i = 0; i < col; i++){
+                    cols += rows;
+                };
+                cols += `</div>`;
+                document.getElementById("matrix 1").innerHTML = cols;
+                document.getElementById("matrix 2").innerHTML = cols;
+            };
+            function timesOrder(caller){
+                if (caller == 4){
+                    document.getElementById("order 5").value = document.getElementById("order 4").value;
+                } else if (caller == 5) {
+                    document.getElementById("order 4").value = document.getElementById("order 5").value;
+                };
+                let col1 = document.getElementById("order 3").value;
+                let row1 = document.getElementById("order 4").value;
+                let rows1 = `<div class = "row">`;
+                for (i = 0; i < row1; i++){
+                    rows1 += `<input type = "number" style="width: 3.5em;height: 1.5em;" class = "item" value = 1 name = "item">`;
+                };
+                rows1 += `</div>`;
+                let cols1 = `<div class = "col">`;
+                for (i = 0; i < col1; i++){
+                    cols1 += rows1;
+                };
+                cols1 += `</div>`;
+                document.getElementById("matrix 3").innerHTML = cols1;
+                let col2 = document.getElementById("order 5").value;
+                let row2 = document.getElementById("order 6").value;
+                let rows2 = `<div class = "row">`;
+                for (i = 0; i < row2; i++){
+                    rows2 += `<input type = "number" style="width: 3.5em;height: 1.5em;" class = "item" value = 1 name = "item">`;
+                };
+                rows2 += `</div>`;
+                let cols2 = `<div class = "col">`;
+                for (i = 0; i < col2; i++){
+                    cols2 += rows2;
+                };
+                cols2 += `</div>`;
+                document.getElementById("matrix 4").innerHTML = cols2;
+            };
+            function chunk(arr, size, out) {
+                out = out || [];
+                if (!arr.length) return out;
+                out.push(arr.slice(0, size));
+                return chunk(arr.slice(size), size, out);
+            };
+            function add(){
+                let nodeList = document.getElementsByName("item");
+                let maxSize = document.getElementById("order 1").value * document.getElementById("order 2").value * 2;
+                let array = [];
+                nodeList.forEach((item, index) => {
+                    if (index < maxSize){array.push(item.value)};
+                });
+                let matrices = chunk(array,document.getElementById("order 2").value);
+                let A = matrices.slice(0,matrices.length/2);
+                let B = matrices.slice(matrices.length/2,matrices.length);
+                let C = [];
+                for (let block = [], i = 0; i < document.getElementById("order 1").value; i++){
+                    for (j = 0; j < document.getElementById("order 2").value; j++){
+                        block.push(Number(A[i][j]) + Number(B[i][j]));
+                    };
+                    C.push(block);
+                    block = [];
+                };
+                let result = `<div class = "col">`;
+                C.forEach(item => {
+                    let str = `<div class = "row">`;
+                    item.forEach(num => {str += `<input type = "number" style="width: 3.5em;height: 1.5em;" class = "item" value = ${num} readonly="readonly">`});
+                    str += "</div>";
+                    result += str;
+                });
+                document.getElementById("result 1").innerHTML = result + "</div>";
+            };
+            function multiply(){
+                let nodeList = document.getElementsByName("item");
+                let maxSize = document.getElementById("order 1").value * document.getElementById("order 2").value * 2;
+                let array = [];
+                nodeList.forEach((item, index) => {
+                    if (index >= maxSize){array.push(item.value)};
+                });
+                let aSize = document.getElementById("order 3").value * document.getElementById("order 4").value;
+                let A = chunk(array.slice(0,aSize),document.getElementById("order 4").value);
+                let B = chunk(array.slice(aSize),document.getElementById("order 5").value);
+                let C = []
+                for (i = 0; i < Number(document.getElementById("order 3").value); i++){
+                    let block = [];
+                    for (j = 0; j < Number(document.getElementById("order 6").value); j++){
+                        block.push(0);
+                        for (k = 0; k < Number(document.getElementById("order 4").value); k++){
+                            block[j] += Number(A[i][k]) * Number(B[k][j]);
+                        }
+                    };
+                    C.push(block);
+                };
+                let result = `<div class = "col">`;
+                C.forEach(item => {
+                    let str = `<div class = "row">`;
+                    item.forEach(num => {str += `<input type = "number" style="width: 3.5em;height: 1.5em;" class = "item" value = ${num} readonly="readonly">`});
+                    str += "</div>";
+                    result += str;
+                });
+                document.getElementById("result 2").innerHTML = result + "</div>";
+            };
+            timesOrder(4);
+            addOrder();
+        </script>
+    </body>
+</html>
